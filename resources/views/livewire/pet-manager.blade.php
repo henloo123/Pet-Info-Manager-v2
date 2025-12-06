@@ -1,5 +1,19 @@
 <div>
+    
+     
     <h1 @class(['text-2xl', 'font-bold', 'mb-4'])>My Pets</h1>
+
+        <!-- FLASH MESSAGE -->
+    @if (session()->has('message'))
+        <div 
+            id="flash-message"
+            class="bg-green-100 border border-green-400 text-green-700 dark:bg-green-900 dark:border-green-600 dark:text-green-100 px-4 py-3 rounded relative mb-4" 
+            role="alert"
+        >
+            <strong class="font-bold">Success!</strong>
+            <span class="block sm:inline">{{ session('message') }}</span>
+        </div>
+    @endif
 
     <!-- CREATE FORM -->
     <!-- wire:submit.prevent stops the standard browser reload and calls PHP -->

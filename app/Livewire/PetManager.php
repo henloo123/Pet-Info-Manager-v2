@@ -38,6 +38,8 @@ class PetManager extends Component
         ]);
 
         $this -> reset(['name', 'species', 'breed', 'weight', 'date_of_birth']);
+
+        session() -> flash('message', 'Pet added Successfully!');
     }
 
     public function deletePet($id){
