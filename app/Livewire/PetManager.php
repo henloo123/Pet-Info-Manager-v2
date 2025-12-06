@@ -33,8 +33,10 @@ class PetManager extends Component
             'name' => $this -> name,
             'species' => $this -> species,
             'breed' => $this -> breed,
-            'weight' => $this -> weight,
-            'date_of_birth' => $this -> date_of_birth,
+            // If weight is empty string, make it NULL. Otherwise use the value.
+            'weight' => ($this->weight === '' ? null : $this->weight),
+            // If date is empty string, make it NULL. Otherwise use the value.
+            'date_of_birth' => ($this->date_of_birth === '' ? null : $this->date_of_birth),
         ]);
 
         $this -> reset(['name', 'species', 'breed', 'weight', 'date_of_birth']);
@@ -50,6 +52,8 @@ class PetManager extends Component
         if ($pet){
             $pet -> delete();
         }
+
+        session() -> flash('message', 'Pet Deleted Successfully!');
     }
 
     public function editPet($id){
@@ -83,13 +87,17 @@ class PetManager extends Component
                     'name' => $this -> name,
                     'species' => $this -> species,
                     'breed' => $this -> breed,
-                    'weight' => $this -> weight ?: null,
-                    'date_of_birth' => $this -> date_of_birth ?: null,
+                    // If weight is empty string, make it NULL. Otherwise use the value.
+            'weight' => ($this->weight === '' ? null : $this->weight),
+            // If date is empty string, make it NULL. Otherwise use the value.
+            'date_of_birth' => ($this->date_of_birth === '' ? null : $this->date_of_birth),
                 ]);
             }
         }
         // Cancel editing mode and reset form
         $this -> cancelEdit();
+
+        session() -> flash('message', 'Pet Updated Successfully!');
         
     }
 
