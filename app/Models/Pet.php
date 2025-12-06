@@ -15,6 +15,7 @@ class Pet extends Model
         'breed',
         'date_of_birth',
         'weight',
+        'image',
     ];
 
     protected $casts = [

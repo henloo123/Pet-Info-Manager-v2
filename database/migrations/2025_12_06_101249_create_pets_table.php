@@ -19,6 +19,8 @@ return new class extends Migration
             $table->date('date_of_birth')->nullable(); // Pet's date of birth
             $table->decimal('weight', 5, 2)->nullable(); // Pet's weight in kg
 
+            $table->string('image')->nullable(); // Pet's image path
+
             $table->timestamps();
         });
     }

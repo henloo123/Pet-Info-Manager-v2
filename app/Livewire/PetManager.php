@@ -4,15 +4,19 @@ namespace App\Livewire;
 
 use App\Models\Pet;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class PetManager extends Component
 {
+    use WithFileUploads;
+
     //Form Properties
     public $name = '';
     public $species = '';
     public $breed = '';
     public $date_of_birth = '';
     public $weight = '';
+    public $image;
 
     //Track Editing State
     public $editingPetId = null;
@@ -24,10 +28,17 @@ class PetManager extends Component
         'breed' => 'nullable|string',
         'weight' => 'nullable|numeric',
         'date_of_birth' => 'nullable|date',
+        'image' => 'nullable|image|max:1024',
     ];
 
     public function createPet(){
         $this -> validate();
+
+        $imagePath = null;
+        if ($this->image){
+            // Store the uploaded image and get its path
+            $imagePath = $this->image->store('pets', 'public');
+        }
 
         Pet::create([
             'name' => $this -> name,
@@ -37,9 +48,10 @@ class PetManager extends Component
             'weight' => ($this->weight === '' ? null : $this->weight),
             // If date is empty string, make it NULL. Otherwise use the value.
             'date_of_birth' => ($this->date_of_birth === '' ? null : $this->date_of_birth),
+            'image' => $imagePath,
         ]);
 
-        $this -> reset(['name', 'species', 'breed', 'weight', 'date_of_birth']);
+        $this -> reset(['name', 'species', 'breed', 'weight', 'date_of_birth', 'image']);
 
         session() -> flash('message', 'Pet added Successfully!');
     }

@@ -94,6 +94,32 @@
             </div>
         </div>
 
+            <!-- Image Upload Input -->
+            <!-- Selenium XPath: //*[@id='pet-image'] -->
+            <div class="col-span-2 border-t pt-4 mt-2 dark:border-gray-600">
+                <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300" for="pet-image">
+                    Upload Photo
+                </label>
+                
+                <input
+                    id="pet-image"
+                    wire:model="image"
+                    type="file"
+                    class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:text-gray-300 dark:file:bg-gray-700 dark:file:text-gray-300"
+                >
+                @error('image') <span id="error-image" class="text-red-500 text-xs">{{ $message }}</span> @enderror
+
+                <!-- Live Preview (Shows immediately after selecting a file) -->
+                <!-- Selenium XPath: //*[@id='preview-image'] -->
+                @if ($image)
+                    <div class="mt-4">
+                        <p class="text-xs text-gray-500 mb-1">Preview:</p>
+                        <img id="preview-image" src="{{ $image->temporaryUrl() }}" class="w-24 h-24 object-cover rounded-lg border shadow-sm">
+                    </div>
+                @endif
+            </div>
+
+
         <!-- Submit Button -->
         <!-- Selenium XPath: //*[@id='btn-add-pet'] -->
         <div class = "flex items-center gap-2 mt-4">
@@ -124,42 +150,61 @@
     <!-- LIST OF PETS (Keep existing code below) -->
     <div @class(['space-y-4']) id="pet-list">
         @foreach($pets as $pet)
-            <div @class(['p-4', 'border', 'rounded', 'bg-gray-50', 'flex', 'justify-between', 'items-center', 'pet-item', 'dark:bg-gray-700', 'dark:border-gray-600'])>
-                <div>
-                    <h3 @class(['font-bold', 'text-lg', 'dark:text-white'])>{{ $pet->name }}</h3>
-                    <p @class(['text-gray-600', 'dark:text-white'])>
-                        {{ $pet->species }} 
-                        • {{ $pet->breed ?? 'Unknown Breed' }}
-                        @if($pet->date_of_birth)
-                             • 🎂 {{ \Carbon\Carbon::parse($pet->date_of_birth)->format('M d, Y') }}
-                        @endif
-                    </p>
+                        <!-- Pet Card Item -->
+            <div class="p-4 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 flex justify-between items-center pet-item transition-colors">
+                
+                <!-- LEFT SIDE: Image + Text Info -->
+                <div class="flex items-center gap-4">
+                    
+                    <!-- Pet Image -->
+                    <!-- Selenium XPath: //*[@id='img-pet-1'] -->
+                    
+                    @if($pet->image)
+                        <img 
+                            src="{{ asset('storage/' . $pet->image) }}" 
+                            alt="{{ $pet->name }}" 
+                            class="w-16 h-16 object-cover rounded-full border-2 border-white dark:border-gray-600 shadow-sm"
+                            id="img-pet-{{ $pet->id }}"
+                        >
+                    @else
+                        <!-- Placeholder Circle if no image -->
+                        <div class="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center text-2xl border-2 border-white dark:border-gray-500">
+                            🐾
+                        </div>
+                    @endif
+
+                    <!-- Pet Details -->
+                    <div>
+                        <h3 class="font-bold text-lg text-gray-800 dark:text-white">{{ $pet->name }}</h3>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm">
+                            {{ $pet->species }} 
+                            • {{ $pet->breed ?? 'Unknown Breed' }}
+                            @if($pet->date_of_birth)
+                                 • 🎂 {{ $pet->date_of_birth->format('M d, Y') }}
+                            @endif
+                        </p>
+                    </div>
                 </div>
 
-                <div @class(['flex', 'items-center', 'space-x-2'])>
-                    <span @class(['text-sm', 'text-gray-500', 'mr-4'])>
-                        <!-- Shows how long ago the pet was added -->
+                <!-- RIGHT SIDE: Buttons (Edit/Delete) -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm text-gray-500 dark:text-gray-400 mr-4 hidden sm:inline">
                         {{ $pet->created_at->diffForHumans() }}
                     </span>
 
-                    <!-- Edit Button -->
-                    <button
-                        wire:click = "editPet({{ $pet -> id }})"
-                        id = "btn-edit-{{ $pet -> id }}"
-                        class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded hover:bg-yellow-200 text-sm font-bold"
+                    <button 
+                        wire:click="editPet({{ $pet->id }})"
+                        id="btn-edit-{{ $pet->id }}"
+                        class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded hover:bg-yellow-200 text-sm font-bold dark:bg-yellow-900 dark:text-yellow-200 dark:hover:bg-yellow-800"
                     >
                         Edit
                     </button>
 
-                    <!-- DELETE BUTTON -->
-                    <!-- Selenium XPath: //*[@id='btn-delete-1'] (where 1 is the ID) -->
-                    <!-- wire:click="deletePet(1)" calls the PHP function with ID 1 -->
-                    <!-- wire:confirm adds a browser popup to ask "Are you sure?" -->
                     <button 
                         wire:click="deletePet({{ $pet->id }})"
-                        wire:confirm="Are you sure you want to delete {{ $pet->name }}?"
+                        wire:confirm="Are you sure?"
                         id="btn-delete-{{ $pet->id }}"
-                        @class(['bg-red-100', 'text-red-600', 'px-3', 'py-1', 'rounded', 'hover:bg-red-200', 'text-sm', 'font-bold'])
+                        class="bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200 text-sm font-bold dark:bg-red-900 dark:text-red-200 dark:hover:bg-red-800"
                     >
                         Delete
                     </button>
