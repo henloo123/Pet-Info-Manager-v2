@@ -78,6 +78,7 @@
                     type="date" 
                     @class(['w-full', 'border', 'p-2', 'rounded', 'dark:bg-gray-800', 'dark:border-gray-600', 'dark:text-white'])
                 >
+                @error('date_of_birth') <span id="error-dob" @class(['text-red-500', 'text-xs'])>{{ $message }}</span> @enderror
             </div>
 
             <!-- Weight Input -->
@@ -147,9 +148,19 @@
         </div>
     </form>
 
+    <!-- Search Input -->
+    <div class="mb-4">
+        <input
+            wire:model.live.debounce.300ms="search"
+            type="text"
+            placeholder="Search pets by name or species..."
+            class="w-full p-2 border rounded shadow-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+        >
+    </div>
+
     <!-- LIST OF PETS (Keep existing code below) -->
     <div @class(['space-y-4']) id="pet-list">
-        @foreach($pets as $pet)
+        @forelse($pets as $pet)
                         <!-- Pet Card Item -->
             <div class="p-4 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600 flex justify-between items-center pet-item transition-colors">
                 
@@ -210,6 +221,14 @@
                     </button>
                 </div>
             </div>
-        @endforeach
+        @empty
+            <div class="text-center p-8 bg-gray-50 dark:bg-gray-800 rounded border dark:border-gray-600">
+                <p class="text-gray-500 dark:text-gray-400 text-lg">No pets found. Add one above!</p>
+            </div>
+        @endforelse
+
+        <div class="mt-4">
+            {{ $pets->links() }}
+        </div>
     </div>
 </div>

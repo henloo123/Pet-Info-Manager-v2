@@ -5,10 +5,12 @@ namespace App\Livewire;
 use App\Models\Pet;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 class PetManager extends Component
 {
     use WithFileUploads;
+    use WithPagination;
 
     //Form Properties
     public $name = '';
@@ -17,6 +19,9 @@ class PetManager extends Component
     public $date_of_birth = '';
     public $weight = '';
     public $image;
+
+    // Search
+    public $search = '';
 
     //Track Editing State
     public $editingPetId = null;
@@ -27,9 +32,14 @@ class PetManager extends Component
         'species' => 'required',
         'breed' => 'nullable|string',
         'weight' => 'nullable|numeric',
-        'date_of_birth' => 'nullable|date',
+        'date_of_birth' => 'nullable|date|before:today',
         'image' => 'nullable|image|max:1024',
     ];
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function createPet(){
         $this -> validate();
@@ -115,6 +125,14 @@ class PetManager extends Component
 
     public function render()
     {
-        return view('livewire.pet-manager', ['pets' => Pet::latest()->get()])->layout('components.layouts.simple');
+        $pets = Pet::query()
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%')
+                      ->orWhere('species', 'like', '%' . $this->search . '%');
+            })
+            ->latest()
+            ->paginate(10);
+
+        return view('livewire.pet-manager', ['pets' => $pets])->layout('components.layouts.simple');
     }
 }
