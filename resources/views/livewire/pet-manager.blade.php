@@ -22,19 +22,19 @@
     <h2 class = "text-lg font-bold mb-4 border-b pb-2">{{ $editingPetId ? 'Edit Pet' : 'Add New Pet' }}</h2>
 
     <!-- Form that runs different functions based on mode -->
-    <form wire:submit.prevent="{{ $editingPetId ? 'updatePet' : 'createPet' }}" @class(['mb-8', 'p-4', 'bg-white', 'border', 'rounded', 'shadow-sm']) id="create-pet-form">
+    <form wire:submit.prevent="{{ $editingPetId ? 'updatePet' : 'createPet' }}" @class(['mb-8', 'p-4', 'bg-white', 'border', 'rounded', 'shadow-sm', 'dark:bg-gray-700', 'dark:border-gray-600']) id="create-pet-form">
         
         <div @class(['grid', 'grid-cols-2', 'gap-4'])>
             
             <!-- Name Input -->
             <!-- Selenium XPath: //*[@id='pet-name'] -->
             <div>
-                <label @class(['block', 'text-sm', 'font-bold', 'mb-1']) for="pet-name">Name</label>
+                <label @class(['block', 'text-sm', 'font-bold', 'mb-1', 'dark:text-gray-300']) for="pet-name">Name</label>
                 <input 
                     id="pet-name" 
                     wire:model="name" 
                     type="text" 
-                    @class(['w-full', 'border', 'p-2', 'rounded'])
+                    @class(['w-full', 'border', 'p-2', 'rounded', 'dark:bg-gray-800', 'dark:border-gray-600', 'dark:text-white'])
                     placeholder="e.g. Buddy"
                 >
                 <!-- Error Message -->
@@ -45,8 +45,8 @@
             <!-- Species Select -->
             <!-- Selenium XPath: //*[@id='pet-species'] -->
             <div>
-                <label @class(['block', 'text-sm', 'font-bold', 'mb-1']) for="pet-species">Species</label>
-                <select id="pet-species" wire:model="species" @class(['w-full', 'border', 'p-2', 'rounded'])>
+                <label @class(['block', 'text-sm', 'font-bold', 'mb-1', 'dark:text-gray-300']) for="pet-species">Species</label>
+                <select id="pet-species" wire:model="species" @class(['w-full', 'border', 'p-2', 'rounded', 'dark:bg-gray-800', 'dark:border-gray-600', 'dark:text-white'])>
                     <option value="">Select Species</option>
                     <option value="Dog">Dog</option>
                     <option value="Cat">Cat</option>
@@ -59,37 +59,37 @@
             <!-- Breed Input -->
             <!-- Selenium XPath: //*[@id='pet-breed'] -->
             <div>
-                <label @class(['block', 'text-sm', 'font-bold', 'mb-1']) for="pet-breed">Breed</label>
+                <label @class(['block', 'text-sm', 'font-bold', 'mb-1', 'dark:text-gray-300']) for="pet-breed">Breed</label>
                 <input 
                     id="pet-breed" 
                     wire:model="breed" 
                     type="text" 
-                    @class(['w-full', 'border', 'p-2', 'rounded'])
+                    @class(['w-full', 'border', 'p-2', 'rounded', 'dark:bg-gray-800', 'dark:border-gray-600', 'dark:text-white'])
                 >
             </div>
 
             <!-- Date of Birth Input -->
             <!-- Selenium XPath: //*[@id='pet-dob'] -->
             <div>
-                <label @class(['block', 'text-sm', 'font-bold', 'mb-1']) for="pet-dob">Birthday</label>
+                <label @class(['block', 'text-sm', 'font-bold', 'mb-1', 'dark:text-gray-300']) for="pet-dob">Birthday</label>
                 <input 
                     id="pet-dob" 
                     wire:model="date_of_birth" 
                     type="date" 
-                    @class(['w-full', 'border', 'p-2', 'rounded'])
+                    @class(['w-full', 'border', 'p-2', 'rounded', 'dark:bg-gray-800', 'dark:border-gray-600', 'dark:text-white'])
                 >
             </div>
 
             <!-- Weight Input -->
             <!-- Selenium XPath: //*[@id='pet-weight'] -->
             <div>
-                <label @class(['block', 'text-sm', 'font-bold', 'mb-1']) for="pet-weight">Weight (kg)</label>
+                <label @class(['block', 'text-sm', 'font-bold', 'mb-1', 'dark:text-gray-300']) for="pet-weight">Weight (kg)</label>
                 <input 
                     id="pet-weight" 
                     wire:model="weight" 
                     type="number" 
                     step="0.01" 
-                    @class(['w-full', 'border', 'p-2', 'rounded'])
+                    @class(['w-full', 'border', 'p-2', 'rounded', 'dark:bg-gray-800', 'dark:border-gray-600', 'dark:text-white'])
                 >
             </div>
         </div>
@@ -124,10 +124,10 @@
     <!-- LIST OF PETS (Keep existing code below) -->
     <div @class(['space-y-4']) id="pet-list">
         @foreach($pets as $pet)
-            <div @class(['p-4', 'border', 'rounded', 'bg-gray-50', 'flex', 'justify-between', 'items-center', 'pet-item'])>
+            <div @class(['p-4', 'border', 'rounded', 'bg-gray-50', 'flex', 'justify-between', 'items-center', 'pet-item', 'dark:bg-gray-700', 'dark:border-gray-600'])>
                 <div>
-                    <h3 @class(['font-bold', 'text-lg'])>{{ $pet->name }}</h3>
-                    <p @class(['text-gray-600'])>
+                    <h3 @class(['font-bold', 'text-lg', 'dark:text-white'])>{{ $pet->name }}</h3>
+                    <p @class(['text-gray-600', 'dark:text-white'])>
                         {{ $pet->species }} 
                         • {{ $pet->breed ?? 'Unknown Breed' }}
                         @if($pet->date_of_birth)
