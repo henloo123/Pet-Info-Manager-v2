@@ -14,6 +14,10 @@ class PetManager extends Component
     public $date_of_birth = '';
     public $weight = '';
 
+    //Track Editing State
+    public $editingPetId = null;
+
+
     protected $rules = [
         'name' => 'required|min:2',
         'species' => 'required',
@@ -44,6 +48,47 @@ class PetManager extends Component
         if ($pet){
             $pet -> delete();
         }
+    }
+
+    public function editPet($id){
+        $pet = Pet::find($id);
+
+        if ($pet) {
+            // Enable editing mode
+            $this->editingPetId = $id;
+            // Populate form fields with existing pet data
+            $this->name = $pet->name;
+            $this->species = $pet->species;
+            $this->breed = $pet->breed;
+            $this->weight = $pet->weight;
+            $this->date_of_birth = $pet -> date_of_birth ? $pet -> date_of_birth -> format('Y-m-d') : '';
+        }
+    }
+
+    public function cancelEdit(){
+        $this -> reset(['editingPetId', 'name', 'species', 'breed', 'weight', 'date_of_birth']);
+    }
+
+    public function updatePet(){
+        $this -> validate();
+
+        // Find the pet being edited
+        if($this -> editingPetId){
+            $pet = Pet::find($this -> editingPetId);
+
+            if ($pet){
+                $pet -> update([
+                    'name' => $this -> name,
+                    'species' => $this -> species,
+                    'breed' => $this -> breed,
+                    'weight' => $this -> weight ?: null,
+                    'date_of_birth' => $this -> date_of_birth ?: null,
+                ]);
+            }
+        }
+        // Cancel editing mode and reset form
+        $this -> cancelEdit();
+        
     }
 
     public function render()

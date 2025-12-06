@@ -16,4 +16,9 @@ class Pet extends Model
         'date_of_birth',
         'weight',
     ];
+
+    protected $casts = [
+        'date_of_birth' => 'date',
+        'weight' => 'decimal:2',
+    ];
 }
