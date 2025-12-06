@@ -100,8 +100,25 @@
                         @endif
                     </p>
                 </div>
-                <div class="text-sm text-gray-500">
-                    {{ $pet->created_at->diffForHumans() }}
+
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm text-gray-500 mr-4">
+                        <!-- Shows how long ago the pet was added -->
+                        {{ $pet->created_at->diffForHumans() }}
+                    </span>
+
+                    <!-- DELETE BUTTON -->
+                    <!-- Selenium XPath: //*[@id='btn-delete-1'] (where 1 is the ID) -->
+                    <!-- wire:click="deletePet(1)" calls the PHP function with ID 1 -->
+                    <!-- wire:confirm adds a browser popup to ask "Are you sure?" -->
+                    <button 
+                        wire:click="deletePet({{ $pet->id }})"
+                        wire:confirm="Are you sure you want to delete {{ $pet->name }}?"
+                        id="btn-delete-{{ $pet->id }}"
+                        class="bg-red-100 text-red-600 px-3 py-1 rounded hover:bg-red-200 text-sm font-bold"
+                    >
+                        Delete
+                    </button>
                 </div>
             </div>
         @endforeach

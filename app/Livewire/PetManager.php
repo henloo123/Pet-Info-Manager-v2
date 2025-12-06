@@ -36,6 +36,16 @@ class PetManager extends Component
         $this -> reset(['name', 'species', 'breed', 'weight', 'date_of_birth']);
     }
 
+    public function deletePet($id){
+        // Finds the pet by ID
+        $pet = Pet::find($id);
+
+        // Checks it pet exists before deleting
+        if ($pet){
+            $pet -> delete();
+        }
+    }
+
     public function render()
     {
         return view('livewire.pet-manager', ['pets' => Pet::latest()->get()])->layout('components.layouts.simple');
