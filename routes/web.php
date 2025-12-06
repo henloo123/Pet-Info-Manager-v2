@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\PetManager;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
@@ -30,3 +31,6 @@ Route::middleware(['auth'])->group(function () {
         )
         ->name('two-factor.show');
 });
+
+// Pet Management Routes
+Route::get('/pets', PetManager::class)->name('pets');
